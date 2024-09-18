@@ -3,15 +3,10 @@
 import config from '@arcgis/core/config'
 import { useEffect, useRef } from 'react'
 import { MapClass } from '@/util/MapClass';
+import { GetCameraLocations } from '@/services/Cameras/CameraService';
 
 
 config.apiKey = process.env.NEXT_PUBLIC_API_KEY as string
-
-const points = [
-  {longitude: -117.24788118125575, latitude: 32.94823280197382}, 
-  {longitude: -117.16020678817303, latitude: 32.73760419615398},
-  {longitude: -117.27315754062893, latitude: 32.849750083987075}
-]
 
 const MapComponent = () => {
 
@@ -29,12 +24,17 @@ const MapComponent = () => {
 
         const view = mapClass.initiateMapView(mapDiv, webmap, [-117.1490,32.7353], 1000000)
 
-        webmap = mapClass.addPointsToMap(webmap, points)
+        GetCameraLocations().then((res: any) => {
+          webmap = mapClass.addPointsToMap(webmap, res)
+        })
+
+        
 
         return () => view && view.destroy()
   
       }
     }, []);
+
   
     return (
     <div className="mapDiv" ref={mapDiv} style={{height: '100vh', width: "100%"}}></div>

@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@import url('https://js.arcgis.com/4.30/@arcgis/core/assets/esri/themes/light/main.css');
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -24,4 +24,12 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
 }

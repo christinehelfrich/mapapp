@@ -61,7 +61,10 @@ export class MapClass {
       };
 
       points.map((p: any) => {
-        const point = new Point(p)
+        const point = new Point({
+          longitude: p.lon,
+          latitude: p.lat
+        })
         const pointGraphic = new Graphic({
           geometry: point,
           symbol: simpleMarkerSymbol

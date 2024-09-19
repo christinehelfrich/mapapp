@@ -6,6 +6,7 @@ import Basemap from "@arcgis/core/Basemap.js";
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
 import Graphic from "@arcgis/core/Graphic";
 import Point from "@arcgis/core/geometry/Point";
+import { CameraLocationResponseDataLocsDataModel } from '@/models/Camera/CameraLocationModel';
 
 config.apiKey = process.env.NEXT_PUBLIC_API_KEY as string
 
@@ -48,7 +49,7 @@ export class MapClass {
       return view
     }
 
-    public addPointsToMap = (map: Map, points: any[]) => {
+    public addPointsToMap = (map: Map, points: CameraLocationResponseDataLocsDataModel[]) => {
       const graphicsLayer = new GraphicsLayer();
       map.add(graphicsLayer);
       const simpleMarkerSymbol = {

@@ -16,6 +16,10 @@ const MapComponent = () => {
     const onPinClicked = (attributes: any) => {
       console.log(attributes)
     }
+
+    const onMapZoomChange = (attributes: any) => {
+      console.log(attributes)
+    }
   
     useEffect(() => {
       if (mapDiv.current) {
@@ -34,6 +38,9 @@ const MapComponent = () => {
           const filteredByPrivate = filterCamerasByPrivate(filteredByState)
           webmap = mapClass.addPointsToMap(webmap, view, filteredByPrivate, onPinClicked)
         })
+
+        mapClass.addOnZoomFunction(view, onMapZoomChange)
+
 
         
 

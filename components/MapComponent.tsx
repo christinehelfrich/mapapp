@@ -3,7 +3,8 @@
 import config from '@arcgis/core/config'
 import { useEffect, useRef } from 'react'
 import { MapClass } from '@/util/MapClass';
-import { GetCameraLocations } from '@/services/Cameras/CameraService';
+import { GetCameraLocations } from '@/services/data/Cameras/CameraService';
+import { filterCamerasByPrivate, filterCamerasByState } from '@/services/filter/CameraLocationFilteringService';
 
 
 config.apiKey = process.env.NEXT_PUBLIC_API_KEY as string
@@ -11,6 +12,10 @@ config.apiKey = process.env.NEXT_PUBLIC_API_KEY as string
 const MapComponent = () => {
 
     const mapDiv = useRef(null);
+
+    const onPinClicked = (attributes: any) => {
+      console.log(attributes)
+    }
   
     useEffect(() => {
       if (mapDiv.current) {
@@ -25,7 +30,9 @@ const MapComponent = () => {
         const view = mapClass.initiateMapView(mapDiv, webmap, [-117.1490,32.7353], 1000000)
 
         GetCameraLocations().then((res: any) => {
-          webmap = mapClass.addPointsToMap(webmap, res)
+          const filteredByState = filterCamerasByState(res, 'CA')
+          const filteredByPrivate = filterCamerasByPrivate(filteredByState)
+          webmap = mapClass.addPointsToMap(webmap, view, filteredByPrivate, onPinClicked)
         })
 
         

@@ -102,13 +102,25 @@ export class MapClass {
       return map
     }
 
-    public addOnZoomFunction = (mapView: MapView, onMapZoomChange: onMapZoomChangeFunction) => {
+    public addOnZoomFunction = (mapView: MapView, onMapZoomChange: onMapZoomChangeFunction, pinLocations: any[]) => {
 
       mapView.watch('extent', (newValue, oldValue) => {
         if (newValue !== oldValue) {
-          onMapZoomChange({newValue: newValue, oldValue: oldValue})
+          const visiblePins = this.updateVisiblePins(pinLocations, mapView)
+          onMapZoomChange({visiblePins, newValue: newValue, oldValue: oldValue})
         }
       });
     }
+
+    private updateVisiblePins = (pinLocations: any[], mapView: MapView) => {
+      const visiblePins = pinLocations.filter((pin: any) => {
+        return mapView.extent.contains(new Point({
+          latitude: pin.lat,
+          longitude: pin.lon,
+        }));
+      });
+
+      return visiblePins
+    };
 
   }

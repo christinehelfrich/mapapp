@@ -14,11 +14,11 @@ const MapComponent = () => {
     const mapDiv = useRef(null);
 
     const onPinClicked = (attributes: any) => {
-      console.log(attributes)
+      return attributes
     }
 
     const onMapZoomChange = (attributes: any) => {
-      console.log(attributes)
+      return attributes
     }
   
     useEffect(() => {
@@ -37,9 +37,8 @@ const MapComponent = () => {
           const filteredByState = filterCamerasByState(res, 'CA')
           const filteredByPrivate = filterCamerasByPrivate(filteredByState)
           webmap = mapClass.addPointsToMap(webmap, view, filteredByPrivate, onPinClicked)
+          mapClass.addOnZoomFunction(view, onMapZoomChange, filteredByPrivate)
         })
-
-        mapClass.addOnZoomFunction(view, onMapZoomChange)
 
 
         

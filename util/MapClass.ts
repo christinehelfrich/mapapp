@@ -90,9 +90,7 @@ export class MapClass {
             (hitResult: any) => hitResult.type === "graphic" && hitResult.graphic.layer === graphicsLayer
           );
           if (graphicHits?.length > 0) {
-            graphicHits.forEach((graphicHit: any) => {
-               onPinClicked(graphicHit.graphic.attributes)
-            });
+               onPinClicked(graphicHits[0].graphic.attributes)
           }
         });
       });

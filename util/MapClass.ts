@@ -6,9 +6,10 @@ import Basemap from "@arcgis/core/Basemap.js";
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
 import Graphic from "@arcgis/core/Graphic";
 import Point from "@arcgis/core/geometry/Point";
-// import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
+//import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
 import { CameraLocationResponseDataLocsDataModel } from '@/models/Camera/CameraLocationModel';
 type onPinClickedFunction = (attributes: any) => void;
+type onMapZoomChangeFunction = (attributes: any) => void;
 config.apiKey = process.env.NEXT_PUBLIC_API_KEY as string
 
 export class MapClass {
@@ -16,6 +17,9 @@ export class MapClass {
     public constructor() {}
   
     public initiateWebMap = (mapStyle: string) => {
+      // This function just initiates the base map 
+      // based on a style selected 
+      // and returns a Map
         const basemap = new Basemap({
           style: {
             id: mapStyle,
@@ -40,6 +44,9 @@ export class MapClass {
       }
 
     public initiateMapView = (mapDiv: any, map: Map, center: number[], scale: number) => {
+      // This function just initiates the MapView
+      // based on the Map, the map div, center point, and scale
+      // and returns a MapView
       const view = new MapView({
         container: mapDiv.current, // The id or node representing the DOM element containing the view.
         map: map, // An instance of a Map object to display in the view.
@@ -51,6 +58,10 @@ export class MapClass {
     }
 
     public addPointsToMap = (map: Map, mapView: MapView, points: CameraLocationResponseDataLocsDataModel[], onPinClicked: onPinClickedFunction) => {
+      // This function adds points to a map
+      // based on MapView, points in lat and long, and a function to be called on pin clicked 
+      // and returns the updated map
+
       const graphicsLayer = new GraphicsLayer();
       map.add(graphicsLayer);
       const simpleMarkerSymbol = {
@@ -61,15 +72,6 @@ export class MapClass {
              width: 1
          }
       };
-      // const handle2 =
-      //   reactiveUtils.watch(
-      //     () => mapView.zoom,
-      //     () => {
-      //       console.log(`zoom changed to ${mapView.zoom}`);
-      //     },
-      //     {
-      //       initial: true
-      //     });
 
       points.map((p: any) => {
         const point = new Point({
@@ -96,9 +98,31 @@ export class MapClass {
       });
 
       // symbol options: https://developers.arcgis.com/javascript/latest/api-reference/esri-symbols-Symbol.html
-     
-
       return map
     }
+
+    public addOnZoomFunction = (mapView: MapView, onMapZoomChange: onMapZoomChangeFunction, pinLocations: any[]) => {
+      // This function adds the zoom anad extend events to the map 
+      // based on a MapView, and a function to be called when the frame changes
+      // and returns a nothing
+
+      mapView.watch('extent', (newValue, oldValue) => {
+        if (newValue !== oldValue) {
+          const visiblePins = this.updateVisiblePins(pinLocations, mapView)
+          onMapZoomChange({visiblePins, newValue: newValue, oldValue: oldValue})
+        }
+      });
+    }
+
+    private updateVisiblePins = (pinLocations: any[], mapView: MapView) => {
+      const visiblePins = pinLocations.filter((pin: any) => {
+        return mapView.extent.contains(new Point({
+          latitude: pin.lat,
+          longitude: pin.lon,
+        }));
+      });
+
+      return visiblePins
+    };
 
   }

@@ -14,26 +14,38 @@ const MapComponent = () => {
     const mapDiv = useRef(null);
 
     const onPinClicked = (attributes: any) => {
-      console.log(attributes)
+      // do something on pin click based on pin attributes
+      return attributes
+    }
+
+    const onMapZoomChange = (attributes: any) => {
+      // do something on viewframe change based on list of visible pins and map position
+      return attributes
     }
   
     useEffect(() => {
       if (mapDiv.current) {
-        /**
-         * Initialize application
-         */
+        // If the map div exists
 
         const mapClass = new MapClass()
 
+        // create base map
         let webmap = mapClass.initiateWebMap("arcgis/dark-gray")
 
+        // create map view
         const view = mapClass.initiateMapView(mapDiv, webmap, [-117.1490,32.7353], 1000000)
 
+        // call api to get the locations of cameras
         GetCameraLocations().then((res: any) => {
+          // filter response by state and private
           const filteredByState = filterCamerasByState(res, 'CA')
           const filteredByPrivate = filterCamerasByPrivate(filteredByState)
+          // add those pins to the map
           webmap = mapClass.addPointsToMap(webmap, view, filteredByPrivate, onPinClicked)
+          // add zoom event to the map
+          mapClass.addOnZoomFunction(view, onMapZoomChange, filteredByPrivate)
         })
+
 
         
 

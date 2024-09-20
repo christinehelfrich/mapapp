@@ -104,7 +104,7 @@ export class MapClass {
 
     public addOnZoomFunction = (mapView: MapView, onMapZoomChange: onMapZoomChangeFunction) => {
 
-      mapView.watch('zoom', (newValue, oldValue) => {
+      mapView.watch('extent', (newValue, oldValue) => {
         if (newValue !== oldValue) {
           onMapZoomChange({newValue: newValue, oldValue: oldValue})
         }

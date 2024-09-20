@@ -6,8 +6,9 @@ import Basemap from "@arcgis/core/Basemap.js";
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
 import Graphic from "@arcgis/core/Graphic";
 import Point from "@arcgis/core/geometry/Point";
+// import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
 import { CameraLocationResponseDataLocsDataModel } from '@/models/Camera/CameraLocationModel';
-
+type onPinClickedFunction = (attributes: any) => void;
 config.apiKey = process.env.NEXT_PUBLIC_API_KEY as string
 
 export class MapClass {
@@ -49,7 +50,7 @@ export class MapClass {
       return view
     }
 
-    public addPointsToMap = (map: Map, points: CameraLocationResponseDataLocsDataModel[]) => {
+    public addPointsToMap = (map: Map, mapView: MapView, points: CameraLocationResponseDataLocsDataModel[], onPinClicked: onPinClickedFunction) => {
       const graphicsLayer = new GraphicsLayer();
       map.add(graphicsLayer);
       const simpleMarkerSymbol = {
@@ -60,6 +61,15 @@ export class MapClass {
              width: 1
          }
       };
+      // const handle2 =
+      //   reactiveUtils.watch(
+      //     () => mapView.zoom,
+      //     () => {
+      //       console.log(`zoom changed to ${mapView.zoom}`);
+      //     },
+      //     {
+      //       initial: true
+      //     });
 
       points.map((p: any) => {
         const point = new Point({
@@ -68,16 +78,29 @@ export class MapClass {
         })
         const pointGraphic = new Graphic({
           geometry: point,
-          symbol: simpleMarkerSymbol
+          symbol: simpleMarkerSymbol,
+          attributes: p
        });
        graphicsLayer.add(pointGraphic);
       })
-     
 
+      mapView.on('click', (event: any) => {
+        mapView.hitTest(event).then((response: any) => {
+          const graphicHits = response.results?.filter(
+            (hitResult: any) => hitResult.type === "graphic" && hitResult.graphic.layer === graphicsLayer
+          );
+          if (graphicHits?.length > 0) {
+            graphicHits.forEach((graphicHit: any) => {
+               onPinClicked(graphicHit.graphic.attributes)
+            });
+          }
+        });
+      });
 
       // symbol options: https://developers.arcgis.com/javascript/latest/api-reference/esri-symbols-Symbol.html
      
 
       return map
     }
+
   }

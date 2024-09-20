@@ -12,6 +12,10 @@ config.apiKey = process.env.NEXT_PUBLIC_API_KEY as string
 const MapComponent = () => {
 
     const mapDiv = useRef(null);
+
+    const onPinClicked = (attributes: any) => {
+      console.log(attributes)
+    }
   
     useEffect(() => {
       if (mapDiv.current) {
@@ -28,7 +32,7 @@ const MapComponent = () => {
         GetCameraLocations().then((res: any) => {
           const filteredByState = filterCamerasByState(res, 'CA')
           const filteredByPrivate = filterCamerasByPrivate(filteredByState)
-          webmap = mapClass.addPointsToMap(webmap, filteredByPrivate)
+          webmap = mapClass.addPointsToMap(webmap, view, filteredByPrivate, onPinClicked)
         })
 
         

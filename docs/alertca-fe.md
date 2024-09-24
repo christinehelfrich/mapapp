@@ -1,5 +1,5 @@
 
-## AlertCA Frontend Architecture
+## ALERTCalifornia Frontend Architecture
 
 ```mermaid
 flowchart TB
@@ -9,27 +9,30 @@ flowchart TB
             webapp("Frontend Server")
         end
     end
-    subgraph "Browser"
+    subgraph "External Services"
+        MapProvider("Map Provider <br> (ESRI)")
+    end
+    subgraph "Browser, Device"
         direction TB
         UI("UI:<br> Images, Text, Links, Input, Events") <-- JS, CSS, HTML, JSON, Images, static content, auth cookie --> webapp
         UserSettings("User<br> Settings")
     end
 
-    webapp <-- auth --> AuthServer
+    MapProvider <-- maps, layers --> UI
+
+    webapp <-- auth,<br>roles --> AuthServer
     webapp <-- Terms,<br> Privacy,<br> video --> Static
-    webapp <-- search --> CameraData
+    webapp <-- search,<br>status --> CameraData
     webapp <-- images --> ImageProvider
     webapp -- ops controls --> CameraController
-    webapp <-- maps --> MapProvider
     webapp -- stats,<br> events --> Logging
     webapp <-- notification<br> settings --> Notifications
     AppConfig <--> KeyVault
-    subgraph "Services"
+    subgraph "Internal Services"
         AuthServer("Azure B2C")
         CameraData("Camera <br> Metadata") <==> Cameras
         ImageProvider("Image <br> Provider") <==> Cameras
         CameraController("Camera <br> Controller") ==> Cameras
-        MapProvider("Map Provider <br> (ESRI)")
         Logging
         Notifications
         Static("Storage,<br> Static Site,<br> CMS")

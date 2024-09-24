@@ -8,8 +8,10 @@ import Graphic from "@arcgis/core/Graphic";
 import Point from "@arcgis/core/geometry/Point";
 //import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
 import { CameraLocationResponseDataLocsDataModel } from '@/models/Camera/CameraLocationModel';
-type onPinClickedFunction = (attributes: any) => void;
-type onMapZoomChangeFunction = (attributes: any) => void;
+import { onPinClickedFunction } from '@/models/Map/MapEventFunctions';
+import { onMapZoomChangeFunction } from '@/models/Map/MapEventFunctions';
+// type onPinClickedFunction = (attributes: any) => void;
+// type onMapZoomChangeFunction = (attributes: any) => void;
 config.apiKey = process.env.NEXT_PUBLIC_API_KEY as string
 
 export class MapClass {

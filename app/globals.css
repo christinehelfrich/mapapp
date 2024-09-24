@@ -33,3 +33,99 @@ body {
   height: 100%;
   width: 100%;
 }
+
+.button-secondary {
+  background-color: #616172;
+  color: #fff;
+  border-radius: 8pt !important;
+  border: none;
+  height: 30px;
+}
+
+
+.camera-list-container {
+  background-color: #2a2a30;
+  padding-bottom: 0.5rem;
+}
+
+.logo-container {
+  display: block;
+  text-align: center;
+}
+
+.logo-container a {
+  display: block;
+  width: max-content;
+  margin: auto;
+  padding: 1rem;
+}
+
+.search-box-container {
+  width: 100%;
+  text-align: center;
+}
+
+.camera-search-input {
+  background-image: url(../assets/images/search-white-01.svg);
+  background-repeat: no-repeat;
+  margin: 0.5rem;
+  padding: 4px 0 4px 25px;
+}
+
+.download-map-button {
+  padding: 4px 1rem 4px 1rem;
+  margin: 1rem;
+}
+
+.download-map-button svg {
+  width: 17px;
+}
+
+/* mobile */
+@media screen and (max-width: 480px) {
+  .map-page-container {
+    display: grid;
+    grid-template-areas:
+    'search'
+    'map'
+    'download';
+  }
+
+  .camera-list-component {
+    grid-area: search;
+    width: 100vw;
+  }
+
+  .map-component {
+    grid-area: map;
+    height: 50vh;
+    width: 100vw;
+  }
+
+  .download-map-button {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+}
+
+/* tablet, desktop, and larger */
+@media screen and (min-width: 480px) {
+  .map-page-container {
+    display: grid;
+    grid-template-columns: 60% auto;
+  }
+
+  .download-map-button {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+  }
+
+  .camera-list-container {
+    height: 100vh;
+  }
+
+}

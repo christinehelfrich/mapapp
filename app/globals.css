@@ -81,6 +81,18 @@ body {
   width: 17px;
 }
 
+
+.camera-list p {
+  color: white;
+}
+
+button.minimize {
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+  margin-left: 50%;
+  transform: translate(-50%, 0%);
+}
+
 /* mobile */
 @media screen and (max-width: 480px) {
   .map-page-container {
@@ -109,6 +121,29 @@ body {
     transform: translate(-50%, -50%);
   }
 
+  .camera-list {
+    overflow: scroll;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .camera-list.minimized {
+    max-height: 0vh;
+  }
+
+  .camera-list.expanded {
+    max-height: 40vh;
+  }
+
+  .camera-details {
+    margin: 1rem;
+    width: fit-content;
+  }
+
+  .camera-details Image {
+    width: 80%;
+  }
+
 }
 
 /* tablet, desktop, and larger */
@@ -124,8 +159,14 @@ body {
     left: 0;
   }
 
-  .camera-list-container {
-    height: 100vh;
+
+  .camera-list {
+    height: 90vh;
+    overflow: scroll;
+  }
+
+  button.minimize {
+    display: none;
   }
 
 }

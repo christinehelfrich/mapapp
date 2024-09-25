@@ -1,7 +1,32 @@
-import React from 'react'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image';
+import CameraDetails from './CameraDetails';
 
-const CameraListComponent = () => {
+type Props = {
+  pinClicked: any;
+  visiblePins: any;
+};
+
+const CameraListComponent = ({pinClicked, visiblePins}: Props) => {
+
+  const [isLoading, setIsLoading] = useState(true)
+  const [minimize, setMinimize] = useState(true)
+
+  useEffect(() => {
+    console.log('pinClicked', pinClicked)
+    setIsLoading(false)
+
+  }, [pinClicked])
+
+  useEffect(() => {
+    console.log('visiblePins', visiblePins)
+    setIsLoading(false)
+
+  }, [visiblePins])
+
+
   return (
     <div className='camera-list-container'>
         <div className='logo-container'>
@@ -23,6 +48,27 @@ const CameraListComponent = () => {
                 </svg>
           </button>
         </div>
+
+        {isLoading && (
+          <div className='camera-list'>
+          <p>loading....</p>
+          </div>
+        )}
+        {!isLoading && visiblePins && visiblePins.length > 0 && (
+        <div className={`camera-list ${minimize ? 'minimized' : 'expanded'}`}>
+          {visiblePins.map((pin: any) => (
+            <CameraDetails cameraDetails={pin} key={pin.id}></CameraDetails>
+          ))}
+
+        </div>
+        )}
+        {minimize && (
+          <button onClick={() => setMinimize(false)} className='button-secondary minimize'>+</button>
+        )}
+        {!minimize && (
+        <button onClick={() => setMinimize(true)} className='button-secondary minimize'>-</button>
+        )}
+
     </div>
   )
 }

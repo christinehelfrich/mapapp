@@ -56,9 +56,6 @@ const MapComponent = ({onPinClickedEvent, onZoomChangeEvent}: Props) => {
           onMapZoomChange(filteredByPrivate)
         })
 
-
-        
-
         return () => view && view.destroy()
   
       }

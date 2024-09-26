@@ -111,7 +111,7 @@ export class MapClass {
       mapView.watch('extent', (newValue, oldValue) => {
         if (newValue !== oldValue) {
           const visiblePins = this.updateVisiblePins(pinLocations, mapView)
-          onMapZoomChange({visiblePins, newValue: newValue, oldValue: oldValue})
+          onMapZoomChange(visiblePins)
         }
       });
     }

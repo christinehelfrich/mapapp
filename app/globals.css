@@ -73,13 +73,17 @@ body {
   padding: 4px 0 4px 25px;
 }
 
-.download-map-button {
+.map-button {
   padding: 4px 1rem 4px 1rem;
   margin: 1rem;
 }
 
-.download-map-button svg {
+.map-button svg {
   width: 17px;
+}
+
+.draw-mode {
+  background-color: #a9a9c6 !important;
 }
 
 
@@ -139,7 +143,7 @@ button.minimize {
     width: 100vw;
   }
 
-  .download-map-button {
+  .map-buttons {
     position: fixed;
     bottom: 0;
     left: 50%;
@@ -178,7 +182,7 @@ button.minimize {
     grid-template-columns: 60% auto;
   }
 
-  .download-map-button {
+  .map-buttons {
     position: fixed;
     bottom: 0;
     left: 0;

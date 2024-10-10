@@ -73,13 +73,18 @@ body {
   padding: 4px 0 4px 25px;
 }
 
-.download-map-button {
+.map-button {
   padding: 4px 1rem 4px 1rem;
   margin: 1rem;
+  max-width: fit-content;
 }
 
-.download-map-button svg {
+.map-button svg {
   width: 17px;
+}
+
+.draw-mode {
+  background-color: #a9a9c6 !important;
 }
 
 
@@ -118,6 +123,12 @@ button.minimize {
   font-size: medium;
 }
 
+.map-filter-popup-container {
+  border-radius: 10px;
+  background-color: rgba(230, 227, 254, 0.7);
+  padding: 0.5rem;
+}
+
 /* mobile */
 @media screen and (max-width: 480px) {
   .map-page-container {
@@ -139,7 +150,7 @@ button.minimize {
     width: 100vw;
   }
 
-  .download-map-button {
+  .map-buttons {
     position: fixed;
     bottom: 0;
     left: 50%;
@@ -175,13 +186,23 @@ button.minimize {
 @media screen and (min-width: 480px) {
   .map-page-container {
     display: grid;
-    grid-template-columns: 60% auto;
+    grid-template-columns: 70% auto;
   }
 
-  .download-map-button {
+  .map-buttons {
     position: fixed;
     bottom: 0;
     left: 0;
+    display: grid;
+    grid-template-rows: 100px auto;
+    grid-template-columns: auto auto auto;
+  }
+  .map-button {
+    grid-row-start: 2;
+  }
+  .map-filter-popup-container {
+    grid-row-start: 1;
+    grid-column-start: 3;
   }
 
 

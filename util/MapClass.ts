@@ -6,12 +6,12 @@ import Basemap from "@arcgis/core/Basemap.js";
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
 import Graphic from "@arcgis/core/Graphic";
 import Point from "@arcgis/core/geometry/Point";
-//import * as reactiveUtils from "@arcgis/core/core/reactiveUtils.js";
 import { CameraLocationResponseDataLocsDataModel } from '@/models/Camera/CameraLocationModel';
 import { onPinClickedFunction } from '@/models/Map/MapEventFunctions';
+import { onDrawCompleteFunction } from '@/models/Map/MapEventFunctions';
 import { onMapZoomChangeFunction } from '@/models/Map/MapEventFunctions';
-// type onPinClickedFunction = (attributes: any) => void;
-// type onMapZoomChangeFunction = (attributes: any) => void;
+import Draw from "@arcgis/core/views/draw/Draw.js";
+
 config.apiKey = process.env.NEXT_PUBLIC_API_KEY as string
 
 export class MapClass {
@@ -126,5 +126,73 @@ export class MapClass {
 
       return visiblePins
     };
+
+    public enableCreatePolygon(view: MapView, onDrawComplete: onDrawCompleteFunction) {
+
+      const draw = new Draw({
+        view: view
+      });
+      const action = draw.create("polygon", {mode: "click"});
+    
+      // PolygonDrawAction.vertex-add
+      // Fires when user clicks, or presses the "F" key.
+      // Can also be triggered when the "R" key is pressed to redo.
+      // fires when a vertex is added
+      action.on("vertex-add",  (evt: any) => {
+        this.createPolygonGraphic(evt.vertices, view);
+      });
+
+      // fires when the pointer moves
+      action.on("cursor-update",  (evt: any) => {
+        this.createPolygonGraphic(evt.vertices, view);
+      });
+
+      // fires when the drawing is completed
+      action.on("draw-complete",  (evt: any) => {
+        this.createPolygonGraphic(evt.vertices, view);
+        onDrawComplete(evt.vertices)
+      });
+
+      // fires when a vertex is removed
+      action.on("vertex-remove",  (evt: any) => {
+        this.createPolygonGraphic(evt.vertices, view);
+      });
+
+    }
+
+    // private measureLine = (vertices: any, view: MapView) => {
+    //   view.graphics.removeAll();
+
+    //   const line = this.createLine(vertices, view);
+    //   //const lineLength = geometryEngine.geodesicLength(line, "miles");
+    //   const graphic = this.createPolygonGraphic(line);
+    //   view.graphics.add(graphic);
+    // }
+
+    private createPolygonGraphic(vertices: any, view: MapView){
+      view.graphics.removeAll();
+      const polygon = {
+        type: "polygon", // autocasts as Polygon
+        rings: vertices,
+        spatialReference: view.spatialReference
+      };
+
+      const simpleMarkerSymbol = {
+        type: "simple-line", // autocasts as SimpleFillSymbol
+        color: "black",
+        style: "solid",
+        outline: {  // autocasts as SimpleLineSymbol
+          color: "black",
+          width: 4
+        }
+     };
+    
+      const graphic = new Graphic({
+        geometry: polygon,
+        symbol: simpleMarkerSymbol
+      });
+      view.graphics.add(graphic);
+    }
+    
 
   }
